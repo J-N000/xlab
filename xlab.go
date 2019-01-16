@@ -25,8 +25,9 @@ func init() {
 func main() {
 	flag.Parse()
 	pwd, _ := exec.Command("pwd").Output()
+	fmtDir := string(pwd[:])
 	mTarget := "/root/mount"
-	mStatement := string(pwd[:]) + ":" + mTarget
+	mStatement := fmtDir[:len(fmtDir) - 1] + ":" + mTarget
 	image := fmt.Sprintf("j-n000/xlab:%s", version)
 	cmdArgs := []string{
 		"-e",
