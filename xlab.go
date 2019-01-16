@@ -24,7 +24,6 @@ func main() {
 	mTarget := "/root/mount"
 	mStatement := string(pwd[:]) + ":" + mTarget
 	image := fmt.Sprintf("j-n000/xlab:%s", version)
-	cmd := terminal
 	cmdArgs := []string{
 		"-e",
 		"docker",
@@ -39,11 +38,9 @@ func main() {
 		name,
 		image}
 
-	fmt.Println(mStatement)
-
 	var out bytes.Buffer
 	var stdErr bytes.Buffer
-	xlab := exec.Command(cmd, cmdArgs...)
+	xlab := exec.Command(terminal, cmdArgs...)
 	xlab.Stdout = &out
 	xlab.Stderr = &stdErr
 	err := xlab.Run()
