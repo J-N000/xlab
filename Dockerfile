@@ -206,7 +206,3 @@ Run apt update && \
 
 # Install angr
 RUN python2 -m pip install angr
-
-COPY .tmux.conf /root/.tmux.conf
-COPY test.sh /root/test.sh
-CMD sh -c 'if [ "$test" = true ]; then echo "Running tests"; chmod +x /root/test.sh; /root/test.sh; else /bin/bash; fi'
