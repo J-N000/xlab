@@ -15,6 +15,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8     
 
 RUN mkdir -p /root/tools
+RUN mkdir -p /root/mount
 
 RUN apt update && \
     apt -y install python-dev python-pip && \
