@@ -22,7 +22,7 @@ func main() {
 	flag.Parse()
 	pwd, _ := exec.Command("pwd").Output()
 	mTarget := "/root/mount"
-	mStatement := "src=" + string(pwd[:]) + ",dst=" + mTarget
+	mStatement := string(pwd[:]) + ":" + mTarget
 	image := fmt.Sprintf("j-n000/xlab:%s", version)
 	cmd := terminal
 	cmdArgs := []string{
@@ -31,7 +31,7 @@ func main() {
 		"run",
 		"-it",
 		"--rm",
-		"--mount",
+		"-v",
 		mStatement,
 		"-w",
 		mTarget,
@@ -53,6 +53,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
-// example command
-// urxvt -e docker run -it --rm -v /home/user/fs:/root/mount -w /root/mount --name xlab-container j-n000/xlab:latest
