@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 )
 
@@ -20,10 +19,7 @@ var (
 func init() {
 	flag.StringVar(&version, "v", "latest", "specify the target image version")
 	flag.StringVar(&name, "n", "xlab-container", "specify a name for the container")
-	terminal = os.Getenv("TRM")
-	if len(terminal) == 0 {
-		terminal = "urxvt"
-	}
+	flag.StringVar(&terminal, "t", "urxvt", "terminal in which to execute container initialization")
 }
 
 func main() {
