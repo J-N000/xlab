@@ -5,21 +5,25 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 )
 
 var (
-	version string
-	name string
+	version  string
+	name     string
 	terminal string
-	out bytes.Buffer
-	stdErr bytes.Buffer
+	out      bytes.Buffer
+	stdErr   bytes.Buffer
 )
 
 func init() {
 	flag.StringVar(&version, "v", "latest", "specify the target image version")
 	flag.StringVar(&name, "n", "xlab-container", "specify a name for the container")
-	terminal = "urxvt"
+	terminal = os.Getenv("TRM")
+	if len(terminal) == 0 {
+		terminal = "urxvt"
+	}
 }
 
 func main() {
@@ -27,7 +31,7 @@ func main() {
 	pwd, _ := exec.Command("pwd").Output()
 	fmtDir := string(pwd[:])
 	mTarget := "/root/mount"
-	mStatement := fmtDir[:len(fmtDir) - 1] + ":" + mTarget
+	mStatement := fmtDir[:len(fmtDir)-1] + ":" + mTarget
 	image := fmt.Sprintf("j-n000/xlab:%s", version)
 	cmdArgs := []string{
 		"-e",
