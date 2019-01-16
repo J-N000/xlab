@@ -8,9 +8,13 @@ import (
 	"os/exec"
 )
 
-var version string
-var name string
-var terminal string
+var (
+	version string
+	name string
+	terminal string
+	out bytes.Buffer
+	stdErr bytes.Buffer
+)
 
 func init() {
 	flag.StringVar(&version, "v", "latest", "specify the target image version")
@@ -38,8 +42,6 @@ func main() {
 		name,
 		image}
 
-	var out bytes.Buffer
-	var stdErr bytes.Buffer
 	xlab := exec.Command(terminal, cmdArgs...)
 	xlab.Stdout = &out
 	xlab.Stderr = &stdErr
