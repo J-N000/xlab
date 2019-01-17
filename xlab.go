@@ -28,7 +28,7 @@ func main() {
 	fmtDir := string(pwd[:])
 	mTarget := "/root/mount"
 	mStatement := fmtDir[:len(fmtDir)-1] + ":" + mTarget
-	image := fmt.Sprintf("j-n000/xlab:%s", version)
+	image := fmt.Sprintf("n0ja/xlab:%s", version)
 	cmdArgs := []string{
 		"-e",
 		"docker",
