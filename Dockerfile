@@ -36,7 +36,7 @@ RUN apt update && \
 # Personal dotfiles
 RUN cd /root && \
     rm .bashrc && \
-    git clone --recursive https://github.com/J-N000/xlab-dots.git && \
+    git clone --recursive https://github.com/n0ja/xlab-dots.git && \
     cd xlab-dots && \
     ./install.sh
 
