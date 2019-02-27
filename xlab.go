@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"regexp"
+	"strings"
 )
 
 var (
@@ -13,22 +15,19 @@ var (
 	version  string
 	name     string
 	terminal string
-	out      bytes.Buffer
+	stdOut   bytes.Buffer
 	stdErr   bytes.Buffer
 )
 
+const hashLen int = 12
+
 func commit() error {
-	hashLen := 12
-	ps := fmt.Sprintf("docker ps | grep %s", comName)
-	psOut, _ := exec.Command(ps).Output()
-	contInfo := string(psOut[:])
+	contID := docPsGrep()
 	commitArgs := []string{
-		"-e",
-		"docker",
 		"commit",
-		contInfo[:hashLen],
+		contID,
 		"noja/xlab:latest"}
-	err := exCmd(commitArgs)
+	err := exCmd("docker", commitArgs)
 	return err
 }
 
@@ -51,13 +50,26 @@ func run() error {
 		"--name",
 		name,
 		image}
-	err := exCmd(runArgs)
+	err := exCmd(terminal, runArgs)
 	return err
 }
 
-func exCmd(cmdArgs []string) error {
-	xlab := exec.Command(terminal, cmdArgs...)
-	xlab.Stdout = &out
+func docPsGrep() string {
+	psOut, _ := exec.Command("docker", "ps").Output()
+	psString := string(psOut[:])
+	psArr := strings.Split(psString, "\n")
+	var contInfo string
+	for _, line := range psArr {
+		if match, _ := regexp.MatchString(comName, line); match {
+			contInfo = line
+		}
+	}
+	return contInfo[:hashLen]
+}
+
+func exCmd(name string, cmdArgs []string) error {
+	xlab := exec.Command(name, cmdArgs...)
+	xlab.Stdout = &stdOut
 	xlab.Stderr = &stdErr
 	err := xlab.Run()
 	return err
