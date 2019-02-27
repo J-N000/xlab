@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	commit   string
+	comName  string
 	version  string
 	name     string
 	terminal string
@@ -17,21 +17,21 @@ var (
 	stdErr   bytes.Buffer
 )
 
-func commit() err error {
-	ps := fmt.Sprintf("docker ps noja/xlab:%s", commit)
+func commit() error {
+	ps := fmt.Sprintf("docker ps noja/xlab:%s", comName)
 	contName, _ := exec.Command(ps).Output()
-	hash := contName[:3]
-	commitArgs := []string {
+	hashName := string(contName[:3])
+	commitArgs := []string{
 		"-e",
 		"docker",
 		"commit",
-		hash,
+		hashName,
 		"noja/xlab:latest"}
-	err = exCmd(commitArgs)
-	return
+	err := exCmd(commitArgs)
+	return err
 }
 
-func run() err error {
+func run() error {
 	pwd, _ := exec.Command("pwd").Output()
 	fmtDir := string(pwd[:])
 	mTarget := "/root/mount"
@@ -50,16 +50,16 @@ func run() err error {
 		"--name",
 		name,
 		image}
-	err = exCmd(runArgs)
-	return
+	err := exCmd(runArgs)
+	return err
 }
 
-func exCmd(cmdArgs []string) err error {
+func exCmd(cmdArgs []string) error {
 	xlab := exec.Command(terminal, cmdArgs...)
 	xlab.Stdout = &out
 	xlab.Stderr = &stdErr
-	err = xlab.Run()
-	return
+	err := xlab.Run()
+	return err
 }
 
 func handleErr(err error) {
@@ -70,7 +70,7 @@ func handleErr(err error) {
 }
 
 func init() {
-	flag.BoolVar(&commit, "c", "", "specify by NAME, a container to commit to latest")
+	flag.StringVar(&comName, "c", "", "specify by NAME, a container to commit to latest")
 	flag.StringVar(&version, "v", "latest", "specify the target image version")
 	flag.StringVar(&name, "n", "xlab-container", "specify a name for the container")
 	flag.StringVar(&terminal, "t", "urxvt", "terminal in which to execute container initialization")
@@ -78,7 +78,7 @@ func init() {
 
 func main() {
 	flag.Parse()
-	if (len(commit) > 0) {
+	if len(comName) > 0 {
 		handleErr(commit())
 	} else {
 		handleErr(run())
