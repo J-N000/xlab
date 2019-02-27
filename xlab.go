@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	comName  string
+	com      bool
 	version  string
 	name     string
 	terminal string
@@ -19,14 +19,18 @@ var (
 	stdErr   bytes.Buffer
 )
 
-const hashLen int = 12
+const (
+	hashLen   int    = 12
+	imageName string = "n0ja/xlab"
+)
 
 func commit() error {
 	contID := docPsGrep()
+	image := fmt.Sprintf("%s:%s", imageName, version)
 	commitArgs := []string{
 		"commit",
 		contID,
-		"noja/xlab:latest"}
+		image}
 	err := exCmd("docker", commitArgs)
 	return err
 }
@@ -36,7 +40,7 @@ func run() error {
 	fmtDir := string(pwd[:])
 	mTarget := "/root/mount"
 	mStatement := fmtDir[:len(fmtDir)-1] + ":" + mTarget
-	image := fmt.Sprintf("n0ja/xlab:%s", version)
+	image := fmt.Sprintf("%s:%s", imageName, version)
 	runArgs := []string{
 		"-e",
 		"docker",
@@ -60,7 +64,7 @@ func docPsGrep() string {
 	psArr := strings.Split(psString, "\n")
 	var contInfo string
 	for _, line := range psArr {
-		if match, _ := regexp.MatchString(comName, line); match {
+		if match, _ := regexp.MatchString(version, line); match {
 			contInfo = line
 		}
 	}
@@ -83,17 +87,19 @@ func handleErr(err error) {
 }
 
 func init() {
-	flag.StringVar(&comName, "c", "", "specify by NAME, a container to commit to latest")
+	flag.BoolVar(&com, "c", false, "specify by version, a container to commit. Default is latest.")
 	flag.StringVar(&version, "v", "latest", "specify the target image version")
-	flag.StringVar(&name, "n", "xlab-container", "specify a name for the container")
+	flag.StringVar(&name, "n", "xlab", "specify a name for the container")
 	flag.StringVar(&terminal, "t", "urxvt", "terminal in which to execute container initialization")
 }
 
 func main() {
 	flag.Parse()
-	if len(comName) > 0 {
+	switch com {
+	case true:
 		handleErr(commit())
-	} else {
+		break
+	default:
 		handleErr(run())
 	}
 }
