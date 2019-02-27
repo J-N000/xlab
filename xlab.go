@@ -18,14 +18,15 @@ var (
 )
 
 func commit() error {
-	ps := fmt.Sprintf("docker ps noja/xlab:%s", comName)
-	contName, _ := exec.Command(ps).Output()
-	hashName := string(contName[:3])
+	hashLen := 12
+	ps := fmt.Sprintf("docker ps | grep %s", comName)
+	psOut, _ := exec.Command(ps).Output()
+	contInfo := string(psOut[:])
 	commitArgs := []string{
 		"-e",
 		"docker",
 		"commit",
-		hashName,
+		contInfo[:hashLen],
 		"noja/xlab:latest"}
 	err := exCmd(commitArgs)
 	return err
