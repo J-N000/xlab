@@ -31,7 +31,7 @@ func commit() error {
 		"commit",
 		contID,
 		image}
-	fmt.Println(fmt.Sprintf("Committing %s @ %s to %s", com, contID, image))
+	fmt.Println(fmt.Sprintf("Committing %s @ %s to %s...", com, contID, image))
 	return exCmd("docker", commitArgs)
 }
 
@@ -91,7 +91,14 @@ func main() {
 	flag.Parse()
 	image = fmt.Sprintf("%s:%s", imageName, version)
 	if com != "" {
-		handleErr(commit())
+		err := commit()
+		switch err {
+		case nil:
+			fmt.Println("Success!")
+			break
+		default:
+			handleErr(err)
+		}
 	} else {
 		handleErr(run())
 	}
