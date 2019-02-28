@@ -26,7 +26,8 @@ const (
 )
 
 func commit() error {
-	contID := docPsGrep()
+	psName := fmt.Sprintf("name=%s", com)
+	contID := docPsFilter(psName)
 	commitArgs := []string{
 		"commit",
 		contID,
@@ -55,11 +56,11 @@ func run() error {
 	return exCmd(terminal, runArgs)
 }
 
-func docPsGrep() string {
+func docPsFilter(s string) string {
 	psArgs := []string{
 		"ps",
 		"-f",
-		"name=" + com}
+		s}
 	psOut, _ := exec.Command("docker", psArgs...).Output()
 	psString := string(psOut[:])
 	psArr := strings.Split(psString, "\n")
