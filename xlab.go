@@ -31,6 +31,7 @@ func commit() error {
 		"commit",
 		contID,
 		image}
+	fmt.Println(fmt.Sprintf("Committing %s @ %s to %s", com, contID, image))
 	return exCmd("docker", commitArgs)
 }
 
@@ -62,8 +63,7 @@ func docPsGrep() string {
 	psOut, _ := exec.Command("docker", psArgs...).Output()
 	psString := string(psOut[:])
 	psArr := strings.Split(psString, "\n")
-	contInfo := psArr[1]
-	return contInfo[:hashLen]
+	return psArr[1][:hashLen]
 }
 
 func exCmd(name string, cmdArgs []string) error {
