@@ -82,7 +82,7 @@ func handleErr(err error) {
 }
 
 func init() {
-	flag.StringVar(&com, "c", "", "specify by NAME, a container to commit to latest. The default container is named xlab.")
+	flag.StringVar(&com, "c", "", "specify by NAME, a container to commit to a tag (specified by -v). The default container is named xlab.")
 	flag.StringVar(&version, "v", "latest", "specify the target image version")
 	flag.StringVar(&name, "n", "xlab", "specify a name for the container")
 	flag.StringVar(&terminal, "t", "urxvt", "terminal in which to execute container initialization")
