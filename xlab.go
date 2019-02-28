@@ -82,10 +82,10 @@ func handleErr(err error) {
 }
 
 func init() {
-	flag.StringVar(&com, "c", "", "specify by NAME, a container to commit to a tag (specified by -v). The default container is named xlab.")
-	flag.StringVar(&version, "v", "latest", "specify the target image version")
-	flag.StringVar(&name, "n", "xlab", "specify a name for the container")
-	flag.StringVar(&terminal, "t", "urxvt", "terminal in which to execute container initialization")
+	flag.StringVar(&com, "c", "", "specify NAME of a container to commit to a version (-v)")
+	flag.StringVar(&version, "v", "latest", "specify the target image VERSION")
+	flag.StringVar(&name, "n", "xlab", "specify a NAME for the container")
+	flag.StringVar(&terminal, "t", "urxvt", "TERMINAL in which to execute container initialization")
 }
 
 func main() {
