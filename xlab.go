@@ -92,14 +92,8 @@ func main() {
 	flag.Parse()
 	image = fmt.Sprintf("%s:%s", imageName, version)
 	if com != "" {
-		err := commit()
-		switch err {
-		case nil:
-			fmt.Println("Success!")
-			break
-		default:
-			handleErr(err)
-		}
+		handleErr(commit())
+		fmt.Println("Success!")
 	} else {
 		handleErr(run())
 	}
